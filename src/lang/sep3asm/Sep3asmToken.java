@@ -4,6 +4,7 @@ import lang.SimpleToken;
 import lang.sep3asm.instruction.Sep3Instruction;
 
 public class Sep3asmToken extends SimpleToken {
+	public static final int TK_DOT			= 1;				// .
 	public static final int TK_DOTWD		= 2;				// .WORD
 	public static final int TK_MINUS		= 3;				// -
 	public static final int TK_COMMA		= 4;				// ,

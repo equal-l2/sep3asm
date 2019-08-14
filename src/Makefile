@@ -1,5 +1,5 @@
 all:
-	bash -c 'javac **/*.java'
+	bash -O globstar -c 'javac **/*.java'
 
 clean:
-	bash -c 'rm -r **/*.class'
+	bash -O globstar -c 'rm -r **/*.class'

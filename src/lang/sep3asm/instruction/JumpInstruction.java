@@ -3,8 +3,8 @@ package lang.sep3asm.instruction;
 import lang.sep3asm.*;
 import lang.sep3asm.parse.Operand;
 
-public class AbsoluteJumpInstruction extends Sep3Instruction {
-	public AbsoluteJumpInstruction(int opCode, int from, int to) {
+public class JumpInstruction extends Sep3Instruction {
+	public JumpInstruction(int opCode, int from, int to) {
 		super(opCode, from, to);
 	}
 	public void generate(Sep3asmParseContext ctx, Operand op1, Operand op2) {
