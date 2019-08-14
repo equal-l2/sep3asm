@@ -16,6 +16,7 @@ public class Sep3assembler {
 				Sep3asmParseRule parseTree = new Program(pcx);
 				parseTree.parse(pcx);				// 構文解析
 				if (pcx.hasNoError()) parseTree.pass1(pcx);			// パス1：ラベルへの割り当て数値の決定
+				pcx.getSymbolTable().show();
 				if (pcx.hasNoError()) parseTree.pass2(pcx);			// パス2：機械語生成
 				pcx.errorReport();
 			} else {

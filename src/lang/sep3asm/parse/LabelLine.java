@@ -32,7 +32,15 @@ public class LabelLine extends Sep3asmParseRule {
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		LabelEntry le = new LabelEntry();
+		if (rhs == null) {
+			le.setInteger(ctx.getLocationCounter());
+		} else {
+			le.setLabel(rhs.getText());
+		}
+		ctx.getSymbolTable().register(name.getText(), le);
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		// no-op
 	}
 }

@@ -15,7 +15,7 @@ public class Line extends Sep3asmParseRule {
 			|| InstLine.isFirst(tk)
 			|| PseudoInstLine.isFirst(tk)
 			|| Comment.isFirst(tk)
-			|| tk.getType() == Sep3asmToken.TK_NL;
+			|| tk.getType() == Sep3asmToken.TK_NL; // このとき syn は null
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
@@ -43,7 +43,9 @@ public class Line extends Sep3asmParseRule {
 		tknz.getNextToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (syn != null) syn.pass1(ctx);
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (syn != null) syn.pass2(ctx);
 	}
 }

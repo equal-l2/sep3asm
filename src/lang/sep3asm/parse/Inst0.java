@@ -20,7 +20,8 @@ public class Inst0 extends Sep3asmParseRule {
 		inst = ct.getCurrentToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
-		sep3inst = ctx.getTokenizer().getInstruction(inst.getText(), ctx);
+		sep3inst = inst.getInstruction();
+		ctx.addLocationCounter(1);
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
 		sep3inst.generate(ctx, null, null);

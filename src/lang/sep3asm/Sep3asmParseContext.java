@@ -4,9 +4,11 @@ import lang.*;
 
 public class Sep3asmParseContext extends SimpleParseContext {
 	Sep3asmSymbolTable symTbl;
+	public boolean hasEnded;
 	public Sep3asmParseContext(IOContext ioCtx,  Sep3asmTokenizer tknz) {
 		super(ioCtx, tknz);
 		symTbl = new Sep3asmSymbolTable();
+		hasEnded = false;
 	}
 
 	@Override
@@ -18,4 +20,9 @@ public class Sep3asmParseContext extends SimpleParseContext {
 	public int getLocationCounter()			{ return locationCounter; }
 	public void addLocationCounter(int n)	{ locationCounter += n; }
 	public void setLocationCounter(int n)	{ locationCounter = n; }
+
+	public void output(int data) {
+		getIOContext().getOutStream().printf("%04x : %04x\n", locationCounter, data);
+		addLocationCounter(1);
+	}
 }

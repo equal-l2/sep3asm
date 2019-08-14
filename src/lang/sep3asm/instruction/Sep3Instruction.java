@@ -14,5 +14,6 @@ public abstract class Sep3Instruction {
 	public int getOp2Info() {
 		return to;
 	}
+
 	public abstract void generate(Sep3asmParseContext ctx, Operand op1, Operand op2);
 }

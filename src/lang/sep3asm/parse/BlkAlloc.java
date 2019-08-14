@@ -37,7 +37,23 @@ public class BlkAlloc extends Sep3asmParseRule {
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		for(Sep3asmToken tk : tks) {
+			if (tk.getType() == Sep3asmToken.TK_NUM) {
+				ctx.addLocationCounter(tk.getIntValue());
+			} else {
+				// BlkAllocのオペランドは現時点で値が決まっていなければならない
+				// (命令配置の際のアドレスに関わるため)
+				Sep3asmSymbolTable tbl = ctx.getSymbolTable();
+				LabelEntry le = tbl.search(tk.getText());
+				if (le == null || le.isLabel()) {
+					ctx.error(tk.toExplainString() + " ラベルが解決できません");
+					return;
+				}
+				ctx.addLocationCounter(le.getInteger());
+			}
+		}
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		pass1(ctx);
 	}
 }

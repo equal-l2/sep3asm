@@ -16,7 +16,9 @@ public class Comment extends Sep3asmParseRule {
 		Sep3asmToken tk = tknz.getCurrentToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		// no-op
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		// no-op
 	}
 }

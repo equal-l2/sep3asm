@@ -29,11 +29,11 @@ public class InstJ extends Sep3asmParseRule {
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
-		sep3inst = ctx.getTokenizer().getInstruction(inst.getText(), ctx);
+		sep3inst = inst.getInstruction();
 		if (op1 != null) {
 			op1.pass1(ctx);
-			op1.limit(sep3inst.getOp1Info(), ctx, inst, "fromオペランドとして");
-			if (op1.needExtraWord()) {
+			op1.limit(sep3inst.getOp1Info(), ctx, inst, false);
+			if (op1.needsExtraWord()) {
 				ctx.addLocationCounter(2);
 			} else {
 				ctx.addLocationCounter(1);

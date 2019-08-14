@@ -4,11 +4,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class PseudoInstLine extends Sep3asmParseRule {
-	private boolean isEnd;
 	private Sep3asmParseRule syn;
 
 	public PseudoInstLine(Sep3asmParseContext ctx) {
-		isEnd = false;
 		syn = null;
 	}
 
@@ -16,7 +14,7 @@ public class PseudoInstLine extends Sep3asmParseRule {
 		return WordAlloc.isFirst(tk)
 			|| BlkAlloc.isFirst(tk)
 			|| StartAddr.isFirst(tk)
-			|| tk.getType() == Sep3asmToken.TK_DOTED;
+			|| tk.getType() == Sep3asmToken.TK_DOTED; // このとき syn は null
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
@@ -32,13 +30,23 @@ public class PseudoInstLine extends Sep3asmParseRule {
 			//System.out.println("StartAddr");
 			syn = new StartAddr(ctx);
 		} else if (tk.getType() == Sep3asmToken.TK_DOTED) {
-			isEnd = true;
+			ctx.hasEnded = true;
 			tknz.getNextToken(ctx); // .endを捨てる
 		}
-		if (!isEnd) syn.parse(ctx);
+		if (syn != null) syn.parse(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (syn == null) {
+			ctx.hasEnded = true;
+		} else {
+			syn.pass1(ctx);
+		}
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (syn == null) {
+			ctx.hasEnded = true;
+		} else {
+			syn.pass2(ctx);
+		}
 	}
 }

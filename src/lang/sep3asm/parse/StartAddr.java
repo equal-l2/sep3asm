@@ -33,7 +33,20 @@ public class StartAddr extends Sep3asmParseRule {
 		tknz.getNextToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (rhs.getType() == Sep3asmToken.TK_NUM) {
+			ctx.setLocationCounter(rhs.getIntValue());
+		} else {
+			// StartAddrのオペランドは現時点で値が決まっていなければならない
+			// (命令配置の際のアドレスに関わるため)
+			Sep3asmSymbolTable tbl = ctx.getSymbolTable();
+			LabelEntry le = tbl.search(rhs.getText());
+			if (le == null || le.isLabel()) {
+				ctx.error(rhs.toExplainString() + " ラベルが解決できません");
+			}
+			ctx.setLocationCounter(le.getInteger());
+		}
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		pass1(ctx);
 	}
 }

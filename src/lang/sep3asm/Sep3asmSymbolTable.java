@@ -7,11 +7,11 @@ public class Sep3asmSymbolTable extends SymbolTable<LabelEntry> {
 
 	@Override
 	public LabelEntry register(String name, LabelEntry e) {
-		return null;
+		return put(name, e);
 	}
 
 	@Override
 	public LabelEntry search(String name) {
-		return null;
+		return get(name);
 	}
 }

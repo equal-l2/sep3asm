@@ -8,5 +8,6 @@ public class OneOperandInstruction extends Sep3Instruction {
 		super(opCode, from, to);
 	}
 	public void generate(Sep3asmParseContext ctx, Operand op1, Operand op2) {
+		ctx.output(opCode | op2.to5bits());
 	}
 }

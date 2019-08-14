@@ -32,7 +32,9 @@ public class InstLine extends Sep3asmParseRule {
 		syn.parse(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		syn.pass1(ctx);
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		syn.pass2(ctx);
 	}
 }

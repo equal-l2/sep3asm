@@ -16,6 +16,7 @@ public class Operand extends Sep3asmParseRule {
 	private Sep3asmToken ref;
 
 	public Operand(Sep3asmParseContext ctx) {
+		regNum = -1;
 	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
@@ -99,17 +100,66 @@ public class Operand extends Sep3asmParseRule {
 	}
 
 	private int fivebits;
-	private boolean needExtraWord;
+	private boolean needsExtraWord;
 	private int extraWord;
+	private int regNum;
 
-	public boolean needExtraWord()	{ return needExtraWord; }
+	public boolean needsExtraWord()	{ return needsExtraWord; }
 	public int to5bits()			{ return fivebits; }
 	public int getExtraWord()		{ return extraWord; }
+	public int getType()			{ return ref.getType(); }
 
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (ref.getType() == Sep3asmToken.TK_REG) {
+			regNum = ref.getRegisterNumber();
+		}
+		if (type == IMM || type == LABEL) {
+			needsExtraWord = true;
+			regNum = 7;
+		}
 	}
-	public void limit(int info, Sep3asmParseContext ctx, Sep3asmToken inst, final String s) {
+	public void limit(int info, Sep3asmParseContext ctx, Sep3asmToken inst, boolean isTo) {
+		if ((info & type) == 0) {
+			ctx.error(ref.toExplainString() + " 使用できないアドレスモードです");
+		}
+		if (type == PREDEC && regNum != 6) {
+			ctx.error(ref.toExplainString() + " プレデクリメント・レジスタ間接モードはR6(SP)にのみ使用できます");
+		}
+		if ((type == INDIRECT || type == POSTINC) && isTo && regNum == 7) {
+			ctx.error(ref.toExplainString() + " R7(PC)は間接モードでToオペランドとして使用することはできません");
+		}
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		if (needsExtraWord) {
+			if (ref.getType() == Sep3asmToken.TK_IDENT) {
+				LabelEntry le = ctx.getSymbolTable().search(ref.getText());
+				if (le == null || le.isLabel()) {
+					ctx.error(ref.toExplainString() + " ラベルが解決できません");
+					return;
+				}
+				extraWord = le.getInteger();
+			} else {
+				extraWord = ref.getIntValue();
+			}
+		}
+
+		fivebits = 0;
+		switch (type) {
+			case REGISTER:
+				fivebits = 0;
+				break;
+			case INDIRECT:
+				fivebits = 1;
+				break;
+			case PREDEC:
+				fivebits = 2;
+				break;
+			case IMM:
+			case LABEL:
+			case POSTINC:
+				fivebits = 3;
+				break;
+		}
+		fivebits = (fivebits << 3) | regNum;
 	}
 }

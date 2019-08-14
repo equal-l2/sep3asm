@@ -22,14 +22,24 @@ public class Program extends Sep3asmParseRule {
 			Sep3asmParseRule line = new Line(ctx);
 			line.parse(ctx);
 			list.add(line);
+			if (ctx.hasEnded) break;
 			tk = ct.getCurrentToken(ctx);
 		}
-		if (tk.getType() != Sep3asmToken.TK_EOF) {
+		if (!ctx.hasEnded && tk.getType() != Sep3asmToken.TK_EOF) {
 			ctx.warning(tk.toExplainString() + "ファイルの終わりにゴミがあります");
 		}
+		ctx.hasEnded = false;
 	}
-	public void pass1(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		for(Sep3asmParseRule pr : list) {
+			pr.pass1(ctx);
+			if (ctx.hasEnded) break;
+		}
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		for(Sep3asmParseRule pr : list) {
+			pr.pass2(ctx);
+			if (ctx.hasEnded) break;
+		}
 	}
 }

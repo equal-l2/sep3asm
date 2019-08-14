@@ -36,7 +36,28 @@ public class WordAlloc extends Sep3asmParseRule {
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+		for(Sep3asmToken tk : tks) {
+			if (tk.getType() == Sep3asmToken.TK_IDENT) {
+				ctx.getSymbolTable().register(tk.getText(), null);
+			}
+			ctx.addLocationCounter(1);
+		}
 	}
-	public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+		int i = 0;
+		for(Sep3asmToken tk : tks) {
+			int data;
+			if (tk.getType() == Sep3asmToken.TK_IDENT) {
+				LabelEntry le = ctx.getSymbolTable().search(tk.getText());
+				if (le == null || le.isLabel()) {
+					ctx.error(tk.toExplainString() + " ラベルが解決できません");
+					return;
+				}
+				data = le.getInteger();
+			} else {
+				data = tk.getIntValue();
+			}
+			ctx.output(data);
+		}
 	}
 }

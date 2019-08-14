@@ -30,10 +30,10 @@ public class Inst1 extends Sep3asmParseRule {
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
-		sep3inst = ctx.getTokenizer().getInstruction(inst.getText(), ctx);
+		sep3inst = inst.getInstruction();
 		if (op2 != null) {
 			op2.pass1(ctx);
-			op2.limit(sep3inst.getOp2Info(), ctx, inst, "toオペランドとして");
+			op2.limit(sep3inst.getOp2Info(), ctx, inst, true);
 		}
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
