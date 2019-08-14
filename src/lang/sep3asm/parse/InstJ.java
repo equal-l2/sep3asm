@@ -24,11 +24,6 @@ public class InstJ extends Sep3asmParseRule {
 			op1 = new Operand(ctx);
 			op1.parse(ctx);
 			tk = ct.getCurrentToken(ctx);
-			if (tk.getType() == Sep3asmToken.TK_COMMA) {
-				tk = ct.getNextToken(ctx);
-			} else {
-				ctx.warning(tk.toExplainString() + ",が抜けていますので補いました");
-			}
 		} else {
 			ctx.warning(tk.toExplainString() + "オペランドが来ます");
 		}
@@ -38,8 +33,11 @@ public class InstJ extends Sep3asmParseRule {
 		if (op1 != null) {
 			op1.pass1(ctx);
 			op1.limit(sep3inst.getOp1Info(), ctx, inst, "fromオペランドとして");
-			if (op1.needExtraWord()) { ctx.addLocationCounter(2); }
-			else					 { ctx.addLocationCounter(1); }
+			if (op1.needExtraWord()) {
+				ctx.addLocationCounter(2);
+			} else {
+				ctx.addLocationCounter(1);
+			}
 		}
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {

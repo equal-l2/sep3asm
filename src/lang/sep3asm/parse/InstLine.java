@@ -18,7 +18,18 @@ public class InstLine extends Sep3asmParseRule {
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-
+		Sep3asmTokenizer tknz = ctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+		if (Inst0.isFirst(tk)) {
+			syn = new Inst0(ctx);
+		} else if (Inst1.isFirst(tk)) {
+			syn = new Inst1(ctx);
+		} else if (Inst2.isFirst(tk)) {
+			syn = new Inst2(ctx);
+		} else if (InstJ.isFirst(tk)) {
+			syn = new InstJ(ctx);
+		}
+		syn.parse(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
 	}

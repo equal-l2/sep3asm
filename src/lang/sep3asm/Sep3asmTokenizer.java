@@ -28,7 +28,7 @@ public class Sep3asmTokenizer extends SimpleTokenizer {
 		if ((ta = (TokenAssoc)rule.get(tk.getText())) != null) {
 			type = ta.getType();
 		}
-		//System.out.printf("Token \"%s\" (%d)\n", tk.getText(), type);
+		//System.out.printf("Token \"%s\" (%d, L.%d)\n", tk.getText(), type, super.lineNo);
 
 		currentToken = new Sep3asmToken(type, tk, ta);
 		return currentToken;

@@ -4,7 +4,10 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class StartAddr extends Sep3asmParseRule {
+	private Sep3asmToken rhs;
+
 	public StartAddr(Sep3asmParseContext ctx) {
+		rhs = null;
 	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
@@ -13,10 +16,21 @@ public class StartAddr extends Sep3asmParseRule {
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
 		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
-		while (tk.getType() != Sep3asmToken.TK_NL) {
-			tk = tknz.getNextToken(ctx);
+		Sep3asmToken tk = tknz.getNextToken(ctx);
+		if (tk.getType() != Sep3asmToken.TK_EQUAL) {
+			ctx.warning("まあ許したるわ");
 		}
+
+		tk = tknz.getNextToken(ctx);
+		switch (tk.getType()) {
+			case Sep3asmToken.TK_NUM:
+			case Sep3asmToken.TK_IDENT:
+				rhs = tk;
+				break;
+			default:
+				ctx.warning("ほげ〜");
+		}
+		tknz.getNextToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
 	}

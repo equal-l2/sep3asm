@@ -65,6 +65,7 @@ public class Sep3asmTokenRule extends HashMap<String, Object> {
 		put(")", new TokenAssoc(Sep3asmToken.TK_PA_CL, null));
 		put("+", new TokenAssoc(Sep3asmToken.TK_PLUS, null));
 		put(".blkw", new TokenAssoc(Sep3asmToken.TK_DOTBL, null));
+		put(".end", new TokenAssoc(Sep3asmToken.TK_DOTED, null));
 		put("r0",  new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(0)));
 		put("r1",  new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(1)));
 		put("r2",  new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(2)));

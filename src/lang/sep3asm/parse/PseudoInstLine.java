@@ -20,7 +20,22 @@ public class PseudoInstLine extends Sep3asmParseRule {
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-
+		Sep3asmTokenizer tknz = ctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+		if (WordAlloc.isFirst(tk)) {
+			//System.out.println("WordAlloc");
+			syn = new WordAlloc(ctx);
+		} else if (BlkAlloc.isFirst(tk)) {
+			//System.out.println("BlkAlloc");
+			syn = new BlkAlloc(ctx);
+		} else if (StartAddr.isFirst(tk)) {
+			//System.out.println("StartAddr");
+			syn = new StartAddr(ctx);
+		} else if (tk.getType() == Sep3asmToken.TK_DOTED) {
+			isEnd = true;
+			tknz.getNextToken(ctx); // .endを捨てる
+		}
+		if (!isEnd) syn.parse(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
 	}

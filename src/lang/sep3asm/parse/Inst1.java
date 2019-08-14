@@ -7,7 +7,7 @@ import lang.sep3asm.instruction.Sep3Instruction;
 public class Inst1 extends Sep3asmParseRule {
 	// inst2 ::= INST2 operand COMMA operand
 	private Sep3asmToken inst;
-	private Operand op1;
+	private Operand op2;
 	Sep3Instruction sep3inst;
 
 	public Inst1(Sep3asmParseContext ctx) {
@@ -22,29 +22,22 @@ public class Inst1 extends Sep3asmParseRule {
 		inst = ct.getCurrentToken(ctx);
 		Sep3asmToken tk = ct.getNextToken(ctx);
 		if (Operand.isFirst(tk)) {
-			op1 = new Operand(ctx);
-			op1.parse(ctx);
+			op2 = new Operand(ctx);
+			op2.parse(ctx);
 			tk = ct.getCurrentToken(ctx);
-			if (tk.getType() == Sep3asmToken.TK_COMMA) {
-				tk = ct.getNextToken(ctx);
-			} else {
-				ctx.warning(tk.toExplainString() + ",が抜けていますので補いました");
-			}
 		} else {
 			ctx.warning(tk.toExplainString() + "オペランドが来ます");
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
 		sep3inst = ctx.getTokenizer().getInstruction(inst.getText(), ctx);
-		if (op1 != null) {
-			op1.pass1(ctx);
-			op1.limit(sep3inst.getOp1Info(), ctx, inst, "fromオペランドとして");
-			if (op1.needExtraWord()) { ctx.addLocationCounter(2); }
-			else					 { ctx.addLocationCounter(1); }
+		if (op2 != null) {
+			op2.pass1(ctx);
+			op2.limit(sep3inst.getOp2Info(), ctx, inst, "toオペランドとして");
 		}
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
-		if (op1 != null) { op1.pass2(ctx); }
-		sep3inst.generate(ctx, op1, null);
+		if (op2 != null) { op2.pass2(ctx); }
+		sep3inst.generate(ctx, null, op2);
 	}
 }

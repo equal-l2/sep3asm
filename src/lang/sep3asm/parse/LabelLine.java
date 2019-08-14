@@ -4,19 +4,11 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class LabelLine extends Sep3asmParseRule {
-	private enum Kind {
-		NONE,
-		ADDR_ASSIGN,
-		NUM_ASSIGN,
-		ALIAS_ASSIGN
-	};
-	private Kind kind;
 	private Sep3asmToken name;
 	private Sep3asmToken rhs;
 
 	public LabelLine(Sep3asmParseContext ctx) {
 		rhs = null;
-		kind = Kind.NONE;
 	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
@@ -29,30 +21,14 @@ public class LabelLine extends Sep3asmParseRule {
 		Sep3asmToken tk = tknz.getNextToken(ctx);
 		switch(tk.getType()) {
 			case Sep3asmToken.TK_COLON:
-				kind = Kind.ADDR_ASSIGN;
+				//System.out.println("LABEL DEF");
 				break;
 			case Sep3asmToken.TK_EQUAL:
-				tk = tknz.getNextToken(ctx);
-				switch (tk.getType()) {
-					case Sep3asmToken.TK_NUM:
-						kind = Kind.NUM_ASSIGN;
-						break;
-					case Sep3asmToken.TK_IDENT:
-						kind = Kind.ALIAS_ASSIGN;
-						break;
-					default:
-						// 右辺がない
-						throw new FatalErrorException();
-				}
-				rhs = tk;
+				//System.out.println("LABEL ASSIGN");
+				rhs = tknz.getNextToken(ctx);
+				break;
 			default:
 				ctx.warning("ラベル定義と推定します");
-				kind = Kind.ADDR_ASSIGN;
-		}
-
-		// これより後ろは捨てる
-		while (tk.getType() != Sep3asmToken.TK_NL && tk.getType() != Sep3asmToken.TK_EOF) {
-			tk = tknz.getNextToken(ctx);
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
