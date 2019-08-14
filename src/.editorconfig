@@ -1,0 +1,3 @@
+root = true
+[*.java]
+indent_style=tab

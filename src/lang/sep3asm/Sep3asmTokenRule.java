@@ -19,10 +19,41 @@ public class Sep3asmTokenRule extends HashMap<String, Object> {
 	// toオペランドに (R7), (R7)+ を使うのは禁止
 
 	public Sep3asmTokenRule() {
-		put("-",  new TokenAssoc(Sep3asmToken.TK_MINUS, null));
-		put("hlt", new TokenAssoc(Sep3asmToken.TK_INST0, new ZeroOperandInstruction(0x0000, 0, 0)));
-		put("mov", new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, D|I|MI|IP|IMM, D|I|IP)));
-		put("rjs", new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, D|I|MI|IP|IMM|LABEL, 0)));
+		final int from_ops = D|I|MI|IP|IMM;
+		final int to_ops = D|I|IP;
+		put("-",     new TokenAssoc(Sep3asmToken.TK_MINUS, null));
+		put("hlt",   new TokenAssoc(Sep3asmToken.TK_INST0, new ZeroOperandInstruction(0x0000, 0, 0)));
+		put("clr",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("asl",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("asr",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("lsl",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("lsr",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("rol",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("ror",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x0000, 0, 0)));
+		put("mov",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("jmp",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("ret",   new TokenAssoc(Sep3asmToken.TK_INST0, new ZeroOperandInstruction(0x0000, 0, 0)));
+		put("rit",   new TokenAssoc(Sep3asmToken.TK_INST0, new ZeroOperandInstruction(0x0000, 0, 0)));
+		put("add",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("rjp",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
+		put("sub",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("cmp",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("nop",   new TokenAssoc(Sep3asmToken.TK_INST0, new ZeroOperandInstruction(0x0000, 0, 0)));
+		put("or",    new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("xor",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("and",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("bit",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x4000, from_ops, to_ops)));
+		put("jsr",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("rjs",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
+		put("svc",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("brn",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("brz",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("brv",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("brc",   new TokenAssoc(Sep3asmToken.TK_INST1, new AbsoluteJumpInstruction(0x4000, from_ops, to_ops)));
+		put("rbn",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
+		put("rbz",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
+		put("rbv",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
+		put("rbc",   new TokenAssoc(Sep3asmToken.TK_INST1, new RelativeJumpInstruction(0xB41E, from_ops|LABEL, 0)));
 		put(".word", new TokenAssoc(Sep3asmToken.TK_DOTWD, null));
 	}
 }
