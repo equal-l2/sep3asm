@@ -3,18 +3,20 @@ package lang.sep3asm.parse;
 import lang.*;
 import lang.sep3asm.*;
 
-public class Line extends Sep3asmParseRule {
+public class PseudoInstLine extends Sep3asmParseRule {
+	private boolean isEnd;
 	private Sep3asmParseRule syn;
 
-	public Line(Sep3asmParseContext ctx) {
+	public PseudoInstLine(Sep3asmParseContext ctx) {
+		isEnd = false;
 		syn = null;
 	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
-		return LabelLine.isFirst(tk)
-			|| InstLine.isFirst(tk)
-			|| PseudoInstLine.isFirst(tk)
-			|| Comment.isFirst(tk);
+		return WordAlloc.isFirst(tk)
+			|| BlkAlloc.isFirst(tk)
+			|| StartAddr.isFirst(tk)
+			|| tk.getType() == Sep3asmToken.TK_DOTED;
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {

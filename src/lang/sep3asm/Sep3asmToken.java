@@ -10,7 +10,7 @@ public class Sep3asmToken extends SimpleToken {
 	public static final int TK_NL			= 5;	// '\n'
 	public static final int TK_INST0		= 6;	// 命令ニモニック（オペランドなし）
 	public static final int TK_INST1		= 7;	// 命令ニモニック（オペランドfromにひとつ）
-	public static final int TK_INST1a		= 8;	// 命令ニモニック（オペランドtoにひとつ）
+	public static final int TK_INSTJ		= 8;	// 命令ニモニック（オペランドtoにひとつ）
 	public static final int TK_INST2		= 9;	// 命令ニモニック（オペランドふたつ）
 	public static final int TK_DOT			= 10;	// .
 	public static final int TK_EQUAL		= 11;	// =
@@ -22,6 +22,7 @@ public class Sep3asmToken extends SimpleToken {
 	public static final int TK_DOTBL		= 17;	// .BLKW
 	public static final int TK_DOTED		= 18;	// .END
 	public static final int TK_REG			= 19;	// R*
+	public static final int TK_SEMI			= 20;	// ;
 
 	public Sep3asmToken(int type, SimpleToken child, TokenAssoc ta) {
 		super(type, child.getLineNo(), child.getColumnNo(), child.getText());

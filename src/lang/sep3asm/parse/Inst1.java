@@ -4,17 +4,17 @@ import lang.*;
 import lang.sep3asm.*;
 import lang.sep3asm.instruction.Sep3Instruction;
 
-public class Inst2 extends Sep3asmParseRule {
+public class Inst1 extends Sep3asmParseRule {
 	// inst2 ::= INST2 operand COMMA operand
 	private Sep3asmToken inst;
-	private Operand op1, op2;
+	private Operand op1;
 	Sep3Instruction sep3inst;
 
-	public Inst2(Sep3asmParseContext ctx) {
+	public Inst1(Sep3asmParseContext ctx) {
 	}
 
 	static public boolean isFirst(Sep3asmToken tk) {
-		return tk.getType() == Sep3asmToken.TK_INST2;
+		return tk.getType() == Sep3asmToken.TK_INST1;
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
@@ -30,12 +30,6 @@ public class Inst2 extends Sep3asmParseRule {
 			} else {
 				ctx.warning(tk.toExplainString() + ",が抜けていますので補いました");
 			}
-			if (Operand.isFirst(tk)) {
-				op2 = new Operand(ctx);
-				op2.parse(ctx);
-			} else {
-				ctx.warning(tk.toExplainString() + "オペランドが来ます");
-			}
 		} else {
 			ctx.warning(tk.toExplainString() + "オペランドが来ます");
 		}
@@ -48,14 +42,9 @@ public class Inst2 extends Sep3asmParseRule {
 			if (op1.needExtraWord()) { ctx.addLocationCounter(2); }
 			else					 { ctx.addLocationCounter(1); }
 		}
-		if (op2 != null) {
-			op2.pass1(ctx);
-			op2.limit(sep3inst.getOp2Info(), ctx, inst, "toオペランドとして");
-		}
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
 		if (op1 != null) { op1.pass2(ctx); }
-		if (op2 != null) { op2.pass2(ctx); }
-		sep3inst.generate(ctx, op1, op2);
+		sep3inst.generate(ctx, op1, null);
 	}
 }
