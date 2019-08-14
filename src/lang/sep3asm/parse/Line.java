@@ -10,7 +10,7 @@ public class Line extends Sep3asmParseRule {
 	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
-		return false;
+		return tk.getType() >= 0;
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {

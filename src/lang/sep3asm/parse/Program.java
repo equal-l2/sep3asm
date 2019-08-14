@@ -22,7 +22,7 @@ public class Program extends Sep3asmParseRule {
 			Sep3asmParseRule line = new Line(ctx);
 			line.parse(ctx);
 			list.add(line);
-			tk = ct.getCurrentToken(ctx);
+			tk = ct.getNextToken(ctx);
 		}
 		if (tk.getType() != Sep3asmToken.TK_EOF) {
 			ctx.warning(tk.toExplainString() + "ファイルの終わりにゴミがあります");

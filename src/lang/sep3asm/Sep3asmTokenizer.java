@@ -5,8 +5,10 @@ import lang.sep3asm.instruction.Sep3Instruction;
 
 public class Sep3asmTokenizer extends SimpleTokenizer {
 	private Sep3asmToken currentToken = null;
+	private Sep3asmTokenRule rule;
 
 	public Sep3asmTokenizer(Sep3asmTokenRule rule) {
+		this.rule = rule;
 		setSpaceChars(" \t\r");
 		setAlphaChars("._");
 		setCommentChar(';');
@@ -22,9 +24,12 @@ public class Sep3asmTokenizer extends SimpleTokenizer {
 		TokenAssoc ta = null;
 		SimpleToken tk = super.getNextToken(pcx);
 		int type = tk.getType();
-		//
-		// ここを自分で考えて作る
-		//
+
+		if ((ta = (TokenAssoc)rule.get(tk.getText())) != null) {
+			type = ta.getType();
+		}
+		//System.out.printf("Token \"%s\" (%d)\n", tk.getText(), type);
+
 		currentToken = new Sep3asmToken(type, tk, ta);
 		return currentToken;
 	}
