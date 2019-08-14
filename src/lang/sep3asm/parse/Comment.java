@@ -14,7 +14,7 @@ public class Comment extends Sep3asmParseRule {
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
 		Sep3asmTokenizer tknz = ctx.getTokenizer();
 		Sep3asmToken tk = tknz.getCurrentToken(ctx);
-		while (tk.getType() != Sep3asmToken.TK_NL) {
+		while (tk.getType() != Sep3asmToken.TK_NL && tk.getType() != Sep3asmToken.TK_EOF) {
 			tk = tknz.getNextToken(ctx);
 		}
 	}

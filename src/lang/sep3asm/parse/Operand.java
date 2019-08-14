@@ -9,7 +9,7 @@ public class Operand extends Sep3asmParseRule {
 	public static final int INDIRECT	= 002;
 	public static final int PREDEC		= 004;
 	public static final int POSTINC		= 010;
-	public static final int IMM			= 020;
+	public static final int IMM		= 020;
 	public static final int LABEL		= 040;
 
 	public Operand(Sep3asmParseContext ctx) {
