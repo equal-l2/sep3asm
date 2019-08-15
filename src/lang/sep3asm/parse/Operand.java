@@ -18,7 +18,6 @@ public class Operand extends Sep3asmParseRule {
 	public Operand(Sep3asmParseContext ctx) {
 		regNum = -1;
 	}
-
 	public static boolean isFirst(Sep3asmToken tk) {
 		switch (tk.getType()) {
 			case Sep3asmToken.TK_NUM:

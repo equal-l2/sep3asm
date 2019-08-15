@@ -35,6 +35,8 @@ public class LabelLine extends Sep3asmParseRule {
 		LabelEntry le = new LabelEntry();
 		if (rhs == null) {
 			le.setInteger(ctx.getLocationCounter());
+		} else if (rhs.getType() == Sep3asmToken.TK_NUM) {
+			le.setInteger(rhs.getIntValue());
 		} else {
 			le.setLabel(rhs.getText());
 		}

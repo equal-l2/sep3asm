@@ -12,7 +12,7 @@ public class RelativeJumpInstruction extends Sep3Instruction {
 		if (op1.needsExtraWord()) {
 			int loc = ctx.getLocationCounter();
 			if (op1.getType() == Sep3asmToken.TK_IDENT) {
-				ctx.output(0xFFFF & (op1.getExtraWord() - loc - 1));
+				ctx.output(op1.getExtraWord() - loc - 1);
 			} else {
 				ctx.output(op1.getExtraWord());
 			}
