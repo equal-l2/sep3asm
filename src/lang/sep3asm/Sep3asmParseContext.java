@@ -22,7 +22,8 @@ public class Sep3asmParseContext extends SimpleParseContext {
 	public void setLocationCounter(int n)	{ locationCounter = n; }
 
 	public void output(int data) {
-		getIOContext().getOutStream().printf("%04x : %04x\n", 0xFFFF & locationCounter, 0xFFFF & data);
+		//System.out.printf("%04X : %04X\n", 0xFFFF & locationCounter, 0xFFFF & data);
+		getIOContext().getOutStream().printf("%04X : %04X\n", 0xFFFF & locationCounter, 0xFFFF & data);
 		addLocationCounter(1);
 	}
 }

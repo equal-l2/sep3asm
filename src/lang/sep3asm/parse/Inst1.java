@@ -35,6 +35,7 @@ public class Inst1 extends Sep3asmParseRule {
 			op2.pass1(ctx);
 			op2.limit(sep3inst.getOp2Info(), ctx, inst, true);
 		}
+		ctx.addLocationCounter(1);
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
 		if (op2 != null) { op2.pass2(ctx); }

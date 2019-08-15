@@ -35,11 +35,13 @@ public class Program extends Sep3asmParseRule {
 			pr.pass1(ctx);
 			if (ctx.hasEnded) break;
 		}
+		ctx.hasEnded = false;
 	}
 	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
 		for(Sep3asmParseRule pr : list) {
 			pr.pass2(ctx);
 			if (ctx.hasEnded) break;
 		}
+		ctx.hasEnded = false;
 	}
 }

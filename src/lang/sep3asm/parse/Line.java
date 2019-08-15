@@ -37,7 +37,11 @@ public class Line extends Sep3asmParseRule {
 		if (syn != null) syn.parse(ctx);
 
 		// 読まなかったものは捨てる
-		if (tknz.getCurrentToken(ctx).getType() != Sep3asmToken.TK_NL) {
+		tk = tknz.getCurrentToken(ctx);
+		if (tk.getType() != Sep3asmToken.TK_NL) {
+			if (tk.getType() != Sep3asmToken.TK_SEMI && !(syn instanceof Comment)) {
+				ctx.warning(tk.toExplainString() + " : 行末にゴミがあります");
+			}
 			tknz.skipToNL(ctx);
 		}
 		tknz.getNextToken(ctx);

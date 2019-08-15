@@ -31,7 +31,7 @@ public class WordAlloc extends Sep3asmParseRule {
 				case Sep3asmToken.TK_EOF:
 					return;
 				default:
-					ctx.warning("とほほ〜");
+					ctx.warning(tknz.toExplainString() + " : .WORDはこのトークンを解釈できません");
 			}
 		}
 	}

@@ -16,8 +16,9 @@ public class Inst0 extends Sep3asmParseRule {
 	}
 
 	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer ct = ctx.getTokenizer();
-		inst = ct.getCurrentToken(ctx);
+		Sep3asmTokenizer tknz = ctx.getTokenizer();
+		inst = tknz.getCurrentToken(ctx);
+		tknz.getNextToken(ctx);
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
 		sep3inst = inst.getInstruction();

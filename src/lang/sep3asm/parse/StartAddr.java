@@ -18,7 +18,7 @@ public class StartAddr extends Sep3asmParseRule {
 		Sep3asmTokenizer tknz = ctx.getTokenizer();
 		Sep3asmToken tk = tknz.getNextToken(ctx);
 		if (tk.getType() != Sep3asmToken.TK_EQUAL) {
-			ctx.warning("まあ許したるわ");
+			ctx.warning(tknz.toExplainString() + " : .= の '=' が見つかりません");
 		}
 
 		tk = tknz.getNextToken(ctx);
@@ -28,7 +28,7 @@ public class StartAddr extends Sep3asmParseRule {
 				rhs = tk;
 				break;
 			default:
-				ctx.warning("ほげ〜");
+				ctx.warning(tknz.toExplainString() + " : .= はこのトークンを解釈できません");
 		}
 		tknz.getNextToken(ctx);
 	}

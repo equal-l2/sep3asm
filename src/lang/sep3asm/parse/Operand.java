@@ -52,7 +52,7 @@ public class Operand extends Sep3asmParseRule {
 						ref = tk;
 						break;
 					default:
-						ctx.warning("不正な即値");
+						ctx.error(tk.toExplainString() + " : 不正な即値です");
 				}
 				break;
 			case Sep3asmToken.TK_REG:
@@ -86,10 +86,10 @@ public class Operand extends Sep3asmParseRule {
 						//System.out.printf("プリデク \"%s\"\n", ref.getText());
 						tknz.getNextToken(ctx); // ')'を捨てる
 					} else {
-						ctx.warning("変");
+						ctx.error(tk.toExplainString() + " : レジスタ指定が見つかりません");
 					}
 				} else {
-					ctx.warning("おかしい");
+					ctx.error(tk.toExplainString() + "予期しない'-'が見つかりました");
 				}
 				break;
 			default:

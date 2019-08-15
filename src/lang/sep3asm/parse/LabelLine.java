@@ -22,13 +22,15 @@ public class LabelLine extends Sep3asmParseRule {
 		switch(tk.getType()) {
 			case Sep3asmToken.TK_COLON:
 				//System.out.println("LABEL DEF");
+				tknz.getNextToken(ctx);
 				break;
 			case Sep3asmToken.TK_EQUAL:
 				//System.out.println("LABEL ASSIGN");
 				rhs = tknz.getNextToken(ctx);
+				tknz.getNextToken(ctx);
 				break;
 			default:
-				ctx.warning("ラベル定義と推定します");
+				ctx.warning(tknz.toExplainString() + " : ラベル定義と推定します");
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {

@@ -32,7 +32,7 @@ public class BlkAlloc extends Sep3asmParseRule {
 				case Sep3asmToken.TK_EOF:
 					return;
 				default:
-					ctx.warning("とほほ〜");
+					ctx.warning(tknz.toExplainString() + " : .BLKWはこのトークンを解釈できません");
 			}
 		}
 	}
