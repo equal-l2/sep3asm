@@ -1,0 +1,19 @@
+plugins {
+    id 'java'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/lang']
+        }
+    }
+}
+
+jar {
+    manifest {
+        attributes(
+            'Main-Class': 'lang.sep3asm.Sep3assembler'
+        )
+    }
+}
