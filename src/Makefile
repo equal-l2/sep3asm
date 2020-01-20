@@ -1,5 +1,5 @@
 all:
-	bash -O globstar -c 'javac -Xlint:deprecation **/*.java'
+	zsh -c 'javac -Xlint:deprecation **/*.java'
 
 clean:
-	bash -O globstar -c 'rm -r **/*.class'
+	zsh -c 'rm -r **/*.class'

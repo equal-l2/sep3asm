@@ -30,7 +30,7 @@ public class LabelLine extends Sep3asmParseRule {
 				tknz.getNextToken(ctx);
 				break;
 			default:
-				ctx.warning(tknz.toExplainString() + " : ラベル定義と推定します");
+				ctx.warning(tk.toExplainString() + " : ラベル定義と推定します");
 		}
 	}
 	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {

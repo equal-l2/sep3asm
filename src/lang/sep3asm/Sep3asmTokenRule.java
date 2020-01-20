@@ -77,5 +77,13 @@ public class Sep3asmTokenRule extends HashMap<String, Object> {
 		put("psw", new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(5)));
 		put("sp",  new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(6)));
 		put("pc",  new TokenAssoc(Sep3asmToken.TK_REG, Integer.valueOf(7)));
+
+		// additional insts
+		put("mul",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x9000, D, D)));
+		put("div",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x9400, D, D)));
+		put("adc",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x5800, from_ops, to_ops)));
+		put("sbc",   new TokenAssoc(Sep3asmToken.TK_INST2, new TwoOperandInstruction(0x6800, from_ops, to_ops)));
+		put("rlc",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x2800, 0, to_ops)));
+		put("rrc",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x2C00, 0, to_ops)));
 	}
 }
