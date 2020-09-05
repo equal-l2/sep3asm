@@ -2,18 +2,24 @@ plugins {
     id 'java'
 }
 
-sourceSets {
-    main {
-        java {
-            srcDirs = ['src/lang']
-        }
-    }
-}
+defaultTasks 'Sep3Assembler', 'TestSep3AsmToken'
 
-jar {
+task Sep3Assembler(type: Jar) {
+    from sourceSets.main.output
     manifest {
         attributes(
             'Main-Class': 'lang.sep3asm.Sep3assembler'
         )
+        archiveBaseName = 'Sep3Assembler'
+    }
+}
+
+task TestSep3AsmToken(type: Jar) {
+    from sourceSets.main.output
+    manifest {
+        attributes(
+            'Main-Class': 'lang.sep3asm.TestSep3asmToken'
+        )
+        archiveBaseName = 'TestSep3AsmToken'
     }
 }
