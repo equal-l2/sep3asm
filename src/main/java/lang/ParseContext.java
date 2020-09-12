@@ -1,6 +1,6 @@
 package lang;
 
-public abstract class ParseContext {
+public class ParseContext {
 	// 入出力に関わるメソッド群
 	@SuppressWarnings("rawtypes")
 	public ParseContext(IOContext ioCtx, Tokenizer tknz) {
@@ -20,8 +20,8 @@ public abstract class ParseContext {
 	public Tokenizer getTokenizer()				{ return tknz; }
 
 	// エラーの扱いに関するもの
-	private int			warningNo = 0;	// 解析警告数
-	private int			errorNo = 0;	// 解析エラー数
+	private int			warningNo;	// 解析警告数
+	private int			errorNo;	// 解析エラー数
 
 	public void errorReport() {
 		String errstr, warnstr;

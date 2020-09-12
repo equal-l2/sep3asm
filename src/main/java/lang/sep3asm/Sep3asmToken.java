@@ -26,7 +26,7 @@ public class Sep3asmToken extends SimpleToken {
 
 	public Sep3asmToken(int type, SimpleToken child, TokenAssoc ta) {
 		super(type, child.getLineNo(), child.getColumnNo(), child.getText());
-		this.info = ta;
+		info = ta;
 	}
 
 	private TokenAssoc info;

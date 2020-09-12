@@ -1,9 +1,10 @@
 package lang.sep3asm;
 
-import lang.*;
+import lang.IOContext;
+import lang.SimpleParseContext;
 
 public class Sep3asmParseContext extends SimpleParseContext {
-	Sep3asmSymbolTable symTbl;
+	private Sep3asmSymbolTable symTbl;
 	public boolean hasEnded;
 	public Sep3asmParseContext(IOContext ioCtx,  Sep3asmTokenizer tknz) {
 		super(ioCtx, tknz);
@@ -16,7 +17,7 @@ public class Sep3asmParseContext extends SimpleParseContext {
 
 	public Sep3asmSymbolTable getSymbolTable()	{ return symTbl; }
 
-	private int locationCounter = 0;
+	private int locationCounter;
 	public int getLocationCounter()			{ return locationCounter; }
 	public void addLocationCounter(int n)	{ locationCounter += n; }
 	public void setLocationCounter(int n)	{ locationCounter = n; }

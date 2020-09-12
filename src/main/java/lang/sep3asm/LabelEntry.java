@@ -8,7 +8,7 @@ public class LabelEntry extends SymbolTableEntry {
 	public static final int E_LAB = 1;		// ラベルで定義されている
 	private int type;
 	private Object obj;
-	public LabelEntry() {}
+
 	public void setInteger(Integer i)	{ obj = i; type = E_INT; }	// 値iで登録する
 	public void setLabel(String s)		{ obj = s; type = E_LAB; }	// ラベルsで登録する
 	public boolean isInteger()			{ return type == E_INT; }	// このエントリは値で登録されているか？

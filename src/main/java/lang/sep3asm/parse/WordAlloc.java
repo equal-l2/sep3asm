@@ -1,7 +1,8 @@
 package lang.sep3asm.parse;
 
-import lang.*;
+import lang.FatalErrorException;
 import lang.sep3asm.*;
+
 import java.util.ArrayList;
 
 public class WordAlloc extends Sep3asmParseRule {
@@ -11,11 +12,11 @@ public class WordAlloc extends Sep3asmParseRule {
 		return tk.getType() == Sep3asmToken.TK_DOTWD;
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(pctx);
 		while (tk.getType() != Sep3asmToken.TK_NL || tk.getType() != Sep3asmToken.TK_EOF) {
-			tk = tknz.getNextToken(ctx);
+			tk = tknz.getNextToken(pctx);
 			switch (tk.getType()) {
 				case Sep3asmToken.TK_COMMA:
 					// no-op
@@ -28,33 +29,33 @@ public class WordAlloc extends Sep3asmParseRule {
 				case Sep3asmToken.TK_EOF:
 					return;
 				default:
-					ctx.warning(tk.toExplainString() + " : .WORDはこのトークンを解釈できません");
+					pctx.warning(tk.toExplainString() + " : .WORDはこのトークンを解釈できません");
 			}
 		}
 	}
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
 		for(Sep3asmToken tk : tks) {
 			if (tk.getType() == Sep3asmToken.TK_IDENT) {
-				ctx.getSymbolTable().register(tk.getText(), null);
+				pctx.getSymbolTable().register(tk.getText(), null);
 			}
-			ctx.addLocationCounter(1);
+			pctx.addLocationCounter(1);
 		}
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
 		int i = 0;
 		for(Sep3asmToken tk : tks) {
 			int data;
 			if (tk.getType() == Sep3asmToken.TK_IDENT) {
-				LabelEntry le = ctx.getSymbolTable().search(tk.getText());
+				LabelEntry le = pctx.getSymbolTable().search(tk.getText());
 				if (le == null || le.isLabel()) {
-					ctx.error(tk.toExplainString() + " ラベルが解決できません");
+					pctx.error(tk.toExplainString() + " ラベルが解決できません");
 					return;
 				}
 				data = le.getInteger();
 			} else {
 				data = tk.getIntValue();
 			}
-			ctx.output(data);
+			pctx.output(data);
 		}
 	}
 }

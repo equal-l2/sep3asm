@@ -1,6 +1,6 @@
 package lang.sep3asm.parse;
 
-import lang.*;
+import lang.FatalErrorException;
 import lang.sep3asm.*;
 
 public class Operand extends Sep3asmParseRule {
@@ -30,9 +30,9 @@ public class Operand extends Sep3asmParseRule {
 		}
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(pctx);
 		switch (tk.getType()) {
 			case Sep3asmToken.TK_NUM:
 			case Sep3asmToken.TK_IDENT:
@@ -41,7 +41,7 @@ public class Operand extends Sep3asmParseRule {
 				ref = tk;
 				break;
 			case Sep3asmToken.TK_SHARP:
-				tk = tknz.getNextToken(ctx);
+				tk = tknz.getNextToken(pctx);
 				//System.out.printf("即値 \"%s\"\n", tk.getText());
 				switch (tk.getType()) {
 					case Sep3asmToken.TK_NUM:
@@ -50,7 +50,7 @@ public class Operand extends Sep3asmParseRule {
 						ref = tk;
 						break;
 					default:
-						ctx.error(tk.toExplainString() + " : 不正な即値です");
+						pctx.error(tk.toExplainString() + " : 不正な即値です");
 				}
 				break;
 			case Sep3asmToken.TK_REG:
@@ -59,11 +59,11 @@ public class Operand extends Sep3asmParseRule {
 				ref = tk;
 				break;
 			case Sep3asmToken.TK_PA_OP:
-				tk = tknz.getNextToken(ctx);
+				tk = tknz.getNextToken(pctx);
 				if (tk.getType() == Sep3asmToken.TK_REG) {
 					ref = tk;
-					tk = tknz.getNextToken(ctx); // ')' を捨てる
-					tk = tknz.getNextToken(ctx);
+					tknz.getNextToken(pctx); // ')' を捨てる
+					tk = tknz.getNextToken(pctx);
 					if (tk.getType() == Sep3asmToken.TK_PLUS) {
 						//System.out.printf("ポスンク \"%s\"\n", ref.getText());
 						type = POSTINC;
@@ -76,24 +76,24 @@ public class Operand extends Sep3asmParseRule {
 				break;
 			case Sep3asmToken.TK_MINUS:
 				type = PREDEC;
-				tk = tknz.getNextToken(ctx);
+				tk = tknz.getNextToken(pctx);
 				if (tk.getType() == Sep3asmToken.TK_PA_OP) {
-					tk = tknz.getNextToken(ctx);
+					tk = tknz.getNextToken(pctx);
 					if (tk.getType() == Sep3asmToken.TK_REG) {
 						ref = tk;
 						//System.out.printf("プリデク \"%s\"\n", ref.getText());
-						tknz.getNextToken(ctx); // ')'を捨てる
+						tknz.getNextToken(pctx); // ')'を捨てる
 					} else {
-						ctx.error(tk.toExplainString() + " : レジスタ指定が見つかりません");
+						pctx.error(tk.toExplainString() + " : レジスタ指定が見つかりません");
 					}
 				} else {
-					ctx.error(tk.toExplainString() + "予期しない'-'が見つかりました");
+					pctx.error(tk.toExplainString() + "予期しない'-'が見つかりました");
 				}
 				break;
 			default:
 				// impossible
 		}
-		tknz.getNextToken(ctx);
+		tknz.getNextToken(pctx);
 	}
 
 	private int fivebits;
@@ -106,7 +106,7 @@ public class Operand extends Sep3asmParseRule {
 	public int getExtraWord()		{ return extraWord; }
 	public int getType()			{ return ref.getType(); }
 
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
 		if (ref.getType() == Sep3asmToken.TK_REG) {
 			regNum = ref.getRegisterNumber();
 		}
@@ -126,12 +126,12 @@ public class Operand extends Sep3asmParseRule {
 			ctx.error(ref.toExplainString() + " R7(PC)は間接モードでToオペランドとして使用することはできません");
 		}
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
 		if (needsExtraWord) {
 			if (ref.getType() == Sep3asmToken.TK_IDENT) {
-				LabelEntry le = ctx.getSymbolTable().search(ref.getText());
+				LabelEntry le = pctx.getSymbolTable().search(ref.getText());
 				if (le == null || le.isLabel()) {
-					ctx.error(ref.toExplainString() + " ラベルが解決できません");
+					pctx.error(ref.toExplainString() + " ラベルが解決できません");
 					return;
 				}
 				extraWord = le.getInteger();
@@ -140,23 +140,13 @@ public class Operand extends Sep3asmParseRule {
 			}
 		}
 
-		fivebits = 0;
-		switch (type) {
-			case REGISTER:
-				fivebits = 0;
-				break;
-			case INDIRECT:
-				fivebits = 1;
-				break;
-			case PREDEC:
-				fivebits = 2;
-				break;
-			case IMM:
-			case LABEL:
-			case POSTINC:
-				fivebits = 3;
-				break;
-		}
+		fivebits = switch (type) {
+			case REGISTER -> 0;
+			case INDIRECT -> 1;
+			case PREDEC -> 2;
+			case IMM, LABEL, POSTINC -> 3;
+			default -> 0;
+		};
 		fivebits = (fivebits << 3) | regNum;
 	}
 }

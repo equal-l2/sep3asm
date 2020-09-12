@@ -4,7 +4,9 @@ import lang.sep3asm.Sep3asmParseContext;
 import lang.sep3asm.parse.Operand;
 
 public abstract class Sep3Instruction {
-	int opCode, from, to;
+	int opCode;
+	int from;
+	int to;
 	public Sep3Instruction(int opCode, int from, int to) {
 		this.opCode = opCode; this.from = from; this.to = to;
 	}

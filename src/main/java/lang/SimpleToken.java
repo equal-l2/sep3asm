@@ -19,12 +19,12 @@ public class SimpleToken extends Token {
 	public int getLineNo()		{ return lineNo; }
 	@Override
 	public int getColumnNo()	{ return colNo; }
-	public int getIntValue()	{ return Integer.decode(text).intValue(); }
+	public int getIntValue()	{ return Integer.decode(text); }
 
 	public SimpleToken(int type, int lineNo, int colNo, String s) {
 		this.type   = type;
 		this.lineNo = lineNo;
 		this.colNo  = colNo;
-		this.text   = s;
+		text = s;
 	}
 }

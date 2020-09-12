@@ -1,6 +1,6 @@
 package lang;
 
-import java.util.*;
+import java.util.HashMap;
 
 public abstract class SymbolTable<E extends SymbolTableEntry> extends HashMap<String, E> {
 	private static final long serialVersionUID = -4113074184770074441L;
@@ -11,8 +11,7 @@ public abstract class SymbolTable<E extends SymbolTableEntry> extends HashMap<St
 	// 全体表示
 	public void show() {
 		System.out.println("--- Symbol Table ---");
-		for (Iterator<String> i = keySet().iterator(); i.hasNext(); ) {
-			String label = i.next();
+		for (String label : keySet()) {
 			E e = get(label);
 			if (e == null) {
 				System.out.println(label + "\t= (null) [未定義]");

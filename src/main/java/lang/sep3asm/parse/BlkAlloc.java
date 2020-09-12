@@ -1,7 +1,8 @@
 package lang.sep3asm.parse;
 
-import lang.*;
+import lang.FatalErrorException;
 import lang.sep3asm.*;
+
 import java.util.ArrayList;
 
 public class BlkAlloc extends Sep3asmParseRule {
@@ -13,11 +14,11 @@ public class BlkAlloc extends Sep3asmParseRule {
 		return tk.getType() == Sep3asmToken.TK_DOTBL;
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(pctx);
 		while (tk.getType() != Sep3asmToken.TK_NL || tk.getType() != Sep3asmToken.TK_EOF) {
-			tk = tknz.getNextToken(ctx);
+			tk = tknz.getNextToken(pctx);
 			switch (tk.getType()) {
 				case Sep3asmToken.TK_COMMA:
 					// no-op
@@ -30,28 +31,28 @@ public class BlkAlloc extends Sep3asmParseRule {
 				case Sep3asmToken.TK_EOF:
 					return;
 				default:
-					ctx.warning(tk.toExplainString() + " : .BLKWはこのトークンを解釈できません");
+					pctx.warning(tk.toExplainString() + " : .BLKWはこのトークンを解釈できません");
 			}
 		}
 	}
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
 		for(Sep3asmToken tk : tks) {
 			if (tk.getType() == Sep3asmToken.TK_NUM) {
-				ctx.addLocationCounter(tk.getIntValue());
+				pctx.addLocationCounter(tk.getIntValue());
 			} else {
 				// BlkAllocのオペランドは現時点で値が決まっていなければならない
 				// (命令配置の際のアドレスに関わるため)
-				Sep3asmSymbolTable tbl = ctx.getSymbolTable();
+				Sep3asmSymbolTable tbl = pctx.getSymbolTable();
 				LabelEntry le = tbl.search(tk.getText());
 				if (le == null || le.isLabel()) {
-					ctx.error(tk.toExplainString() + " ラベルが解決できません");
+					pctx.error(tk.toExplainString() + " ラベルが解決できません");
 					return;
 				}
-				ctx.addLocationCounter(le.getInteger());
+				pctx.addLocationCounter(le.getInteger());
 			}
 		}
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
-		pass1(ctx);
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
+		pass1(pctx);
 	}
 }

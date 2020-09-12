@@ -7,8 +7,8 @@ import java.io.PrintStream;
 public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> {
 	private int		lineNo, colNo;
 	private char		backCh;
-	private boolean		backChExist = false;
-	private boolean		caseSensitive = false;
+	private boolean		backChExist;
+	private boolean		caseSensitive;
 
 	public SimpleTokenizer() {
 		lineNo = 1; colNo = 0;
@@ -25,15 +25,16 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 //	}
 // end for JUnit
 
-	private final int CHAR_SPACE	= 0;
-	private final int CHAR_ALPHA	= 1;
-	private final int CHAR_NUM		= 2;
-	private final int CHAR_PUNCT	= 3;
-	private final int CHAR_COMMENT	= 4;
+	private static final int CHAR_SPACE	= 0;
+	private static final int CHAR_ALPHA	= 1;
+	private static final int CHAR_NUM		= 2;
+	private static final int CHAR_PUNCT	= 3;
+	private static final int CHAR_COMMENT	= 4;
 	private int[] charSet = new int[255];
-	private boolean useHexNumber = false;
-	private boolean useOctalNumber = false;
+	private boolean useHexNumber;
+	private boolean useOctalNumber;
 //	private boolean useDirective = false;
+	private static final char EOF = (char)-1;
 
 	private void setChar(String s, int type) {
 		for (int i = 0; i < s.length(); ++i) {
@@ -74,7 +75,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 				ch = (char) in.read();
 			} catch (IOException e) {
 				e.printStackTrace(err);
-				ch = (char) -1;
+				ch = EOF;
 			}
 		}
 		++colNo;
@@ -99,7 +100,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 		colNo = 0;
 	}
 
-	private SimpleToken currentTk = null;
+	private SimpleToken currentTk;
 	// 現在読み込まれているトークンを返す
 	@Override
 	public SimpleToken getCurrentToken(SimpleParseContext pcx) {
@@ -118,12 +119,12 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 		SimpleToken tk = null;
 		char ch;
 		int  startCol;
-		StringBuffer text = new StringBuffer();
+		StringBuilder text = new StringBuilder();
 
 		// 空白文字の読み飛ばし
 		do {
 			ch = readChar();
-			if (ch == (char) -1) { break; }		// EOF
+			if (ch == EOF) { break; }		// EOF
 			if (charSet[ch] == CHAR_COMMENT) {	// コメントは行末まで読み飛ばし
 				ch = readChar();
 				while (ch != '\n') {
@@ -133,7 +134,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 		} while (charSet[ch] == CHAR_SPACE);
 		startCol = colNo;					// この桁からトークンが始まる
 
-		if (ch == (char) -1) { // EOF
+		if (ch == EOF) { // EOF
 			tk = new SimpleToken(SimpleToken.TK_EOF, lineNo, startCol, "end_of_file");
 		} else {
 			String s;
@@ -143,7 +144,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 					text.append(ch);
 					ch = readChar();
 					//if (ch == (char) -1) break; // EOF
-				} while ((ch != (char) -1) && (charSet[ch] == CHAR_ALPHA || charSet[ch] == CHAR_NUM));
+				} while ((ch != EOF) && (charSet[ch] == CHAR_ALPHA || charSet[ch] == CHAR_NUM));
 				backChar(ch);
 				s = text.toString();
 				tk = new SimpleToken(SimpleToken.TK_IDENT, lineNo, startCol, s);
@@ -160,7 +161,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 								text.append(ch);
 								ch = readChar();
 								// if (ch == (char) -1) break; // EOF
-							} while ((ch != (char) -1) && ((charSet[ch] == CHAR_NUM) || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f')));
+							} while ((ch != EOF) && ((charSet[ch] == CHAR_NUM) || (ch >= 'A' && ch <= 'F') || (ch >= 'a' && ch <= 'f')));
 							backChar(ch);
 						} else {										// 中途半端な16進数
 							backChar(ch);
@@ -168,14 +169,14 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 							break;
 						}
 					} else if (useOctalNumber) {					// 8進数
-						while ((ch != (char) -1) && ((ch >= '0') && (ch <= '7'))) {
+						while ((ch != EOF) && ((ch >= '0') && (ch <= '7'))) {
 							text.append(ch);
 							ch = readChar();
 						}
 
 						backChar(ch);
 					} else {										// 10進数
-						while ((ch != (char) -1) && (charSet[ch] == CHAR_NUM)) {
+						while ((ch != EOF) && (charSet[ch] == CHAR_NUM)) {
 							text.append(ch);
 							ch = readChar();
 						}
@@ -186,7 +187,7 @@ public class SimpleTokenizer extends Tokenizer<SimpleToken, SimpleParseContext> 
 						text.append(ch);
 						ch = readChar();
 						//if (ch == (char) -1) break; // EOF
-					} while ((ch != (char) -1) && (charSet[ch] == CHAR_NUM));
+					} while ((ch != EOF) && (charSet[ch] == CHAR_NUM));
 					backChar(ch);
 				}
 				tk = new SimpleToken(SimpleToken.TK_NUM, lineNo, startCol, text.toString());

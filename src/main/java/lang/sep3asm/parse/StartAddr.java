@@ -1,6 +1,6 @@
 package lang.sep3asm.parse;
 
-import lang.*;
+import lang.FatalErrorException;
 import lang.sep3asm.*;
 
 public class StartAddr extends Sep3asmParseRule {
@@ -12,39 +12,39 @@ public class StartAddr extends Sep3asmParseRule {
 		return tk.getType() == Sep3asmToken.TK_DOT;
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getNextToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getNextToken(pctx);
 		if (tk.getType() != Sep3asmToken.TK_EQUAL) {
-			ctx.warning(tk.toExplainString() + " : .= の '=' が見つかりません");
+			pctx.warning(tk.toExplainString() + " : .= の '=' が見つかりません");
 		}
 
-		tk = tknz.getNextToken(ctx);
+		tk = tknz.getNextToken(pctx);
 		switch (tk.getType()) {
 			case Sep3asmToken.TK_NUM:
 			case Sep3asmToken.TK_IDENT:
 				rhs = tk;
 				break;
 			default:
-				ctx.warning(tk.toExplainString() + " : .= はこのトークンを解釈できません");
+				pctx.warning(tk.toExplainString() + " : .= はこのトークンを解釈できません");
 		}
-		tknz.getNextToken(ctx);
+		tknz.getNextToken(pctx);
 	}
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
 		if (rhs.getType() == Sep3asmToken.TK_NUM) {
-			ctx.setLocationCounter(rhs.getIntValue());
+			pctx.setLocationCounter(rhs.getIntValue());
 		} else {
 			// StartAddrのオペランドは現時点で値が決まっていなければならない
 			// (命令配置の際のアドレスに関わるため)
-			Sep3asmSymbolTable tbl = ctx.getSymbolTable();
+			Sep3asmSymbolTable tbl = pctx.getSymbolTable();
 			LabelEntry le = tbl.search(rhs.getText());
 			if (le == null || le.isLabel()) {
-				ctx.error(rhs.toExplainString() + " ラベルが解決できません");
+				pctx.error(rhs.toExplainString() + " ラベルが解決できません");
 			}
-			ctx.setLocationCounter(le.getInteger());
+			pctx.setLocationCounter(le.getInteger());
 		}
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
-		pass1(ctx);
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
+		pass1(pctx);
 	}
 }

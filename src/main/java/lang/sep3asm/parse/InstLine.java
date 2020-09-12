@@ -1,7 +1,10 @@
 package lang.sep3asm.parse;
 
-import lang.*;
-import lang.sep3asm.*;
+import lang.FatalErrorException;
+import lang.sep3asm.Sep3asmParseContext;
+import lang.sep3asm.Sep3asmParseRule;
+import lang.sep3asm.Sep3asmToken;
+import lang.sep3asm.Sep3asmTokenizer;
 
 public class InstLine extends Sep3asmParseRule {
     // instLine ::= inst0 | inst1 | inst2 | instJ
@@ -15,9 +18,9 @@ public class InstLine extends Sep3asmParseRule {
 			|| InstJ.isFirst(tk);
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(pctx);
 		if (Inst0.isFirst(tk)) {
 			syn = new Inst0();
 		} else if (Inst1.isFirst(tk)) {
@@ -27,12 +30,12 @@ public class InstLine extends Sep3asmParseRule {
 		} else if (InstJ.isFirst(tk)) {
 			syn = new InstJ();
 		}
-		syn.parse(ctx);
+		syn.parse(pctx);
 	}
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
-		syn.pass1(ctx);
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
+		syn.pass1(pctx);
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
-		syn.pass2(ctx);
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
+		syn.pass2(pctx);
 	}
 }

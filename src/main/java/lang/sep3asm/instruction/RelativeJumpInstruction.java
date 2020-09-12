@@ -1,6 +1,7 @@
 package lang.sep3asm.instruction;
 
-import lang.sep3asm.*;
+import lang.sep3asm.Sep3asmParseContext;
+import lang.sep3asm.Sep3asmToken;
 import lang.sep3asm.parse.Operand;
 
 public class RelativeJumpInstruction extends Sep3Instruction {

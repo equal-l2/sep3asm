@@ -1,9 +1,13 @@
 package lang.sep3asm;
 
-import lang.*;
-import lang.sep3asm.parse.*;
-import java.io.*;
-import java.nio.file.*;
+import lang.FatalErrorException;
+import lang.IOContext;
+import lang.sep3asm.parse.Program;
+
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class Sep3assembler {
 	public static void main(String[] args) {

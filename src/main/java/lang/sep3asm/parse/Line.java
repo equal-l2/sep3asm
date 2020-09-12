@@ -1,7 +1,10 @@
 package lang.sep3asm.parse;
 
-import lang.*;
-import lang.sep3asm.*;
+import lang.FatalErrorException;
+import lang.sep3asm.Sep3asmParseContext;
+import lang.sep3asm.Sep3asmParseRule;
+import lang.sep3asm.Sep3asmToken;
+import lang.sep3asm.Sep3asmTokenizer;
 
 public class Line extends Sep3asmParseRule {
 	// line ::= (labelLine | instLine | pseudoInstLine | comment) NL
@@ -16,9 +19,9 @@ public class Line extends Sep3asmParseRule {
 			|| tk.getType() == Sep3asmToken.TK_NL; // このとき syn は null
 	}
 
-	public void parse(Sep3asmParseContext ctx) throws FatalErrorException {
-		Sep3asmTokenizer tknz = ctx.getTokenizer();
-		Sep3asmToken tk = tknz.getCurrentToken(ctx);
+	public void parse(Sep3asmParseContext pctx) throws FatalErrorException {
+		Sep3asmTokenizer tknz = pctx.getTokenizer();
+		Sep3asmToken tk = tknz.getCurrentToken(pctx);
 		if (LabelLine.isFirst(tk)) {
 			//System.out.println("Label");
 			syn = new LabelLine();
@@ -33,22 +36,22 @@ public class Line extends Sep3asmParseRule {
 			//System.out.println("Comment");
 			syn = new Comment();
 		}
-		if (syn != null) syn.parse(ctx);
+		if (syn != null) syn.parse(pctx);
 
 		// 読まなかったものは捨てる
-		tk = tknz.getCurrentToken(ctx);
+		tk = tknz.getCurrentToken(pctx);
 		if (tk.getType() != Sep3asmToken.TK_NL) {
 			if (tk.getType() != Sep3asmToken.TK_SEMI && !(syn instanceof Comment)) {
-				ctx.warning(tk.toExplainString() + " : 行末にゴミがあります");
+				pctx.warning(tk.toExplainString() + " : 行末にゴミがあります");
 			}
-			tknz.skipToNL(ctx);
+			tknz.skipToNL(pctx);
 		}
-		tknz.getNextToken(ctx);
+		tknz.getNextToken(pctx);
 	}
-	public void pass1(Sep3asmParseContext ctx) throws FatalErrorException {
-		if (syn != null) syn.pass1(ctx);
+	public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
+		if (syn != null) syn.pass1(pctx);
 	}
-	public void pass2(Sep3asmParseContext ctx) throws FatalErrorException {
-		if (syn != null) syn.pass2(ctx);
+	public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
+		if (syn != null) syn.pass2(pctx);
 	}
 }

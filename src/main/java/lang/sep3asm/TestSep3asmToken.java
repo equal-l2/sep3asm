@@ -1,6 +1,7 @@
 package lang.sep3asm;
 
-import lang.*;
+import lang.FatalErrorException;
+import lang.IOContext;
 
 public class TestSep3asmToken {
 	private static class TestTokenizer extends Sep3asmParseRule {
@@ -8,20 +9,20 @@ public class TestSep3asmToken {
 		public TestTokenizer(Sep3asmParseContext pcx) {}
 		public static boolean isFirst(Sep3asmToken tk) { return true; }
 
-		public void parse(Sep3asmParseContext ctx) {
-			Sep3asmToken tk = ctx.getTokenizer().getCurrentToken(ctx);
+		public void parse(Sep3asmParseContext pctx) {
+			Sep3asmToken tk = pctx.getTokenizer().getCurrentToken(pctx);
 			while (tk.getType() != Sep3asmToken.TK_EOF) {
 				if (tk.getType() == Sep3asmToken.TK_NUM) {
-					ctx.getIOContext().getOutStream().println("Token=" + tk.toExplainString() + " value=" + tk.getIntValue());
+					pctx.getIOContext().getOutStream().println("Token=" + tk.toExplainString() + " value=" + tk.getIntValue());
 				} else {
-					ctx.getIOContext().getOutStream().println("Token=" + tk.toExplainString());
+					pctx.getIOContext().getOutStream().println("Token=" + tk.toExplainString());
 				}
-				tk = ctx.getTokenizer().getNextToken(ctx);
+				tk = pctx.getTokenizer().getNextToken(pctx);
 			}
 		}
-		public void pass1(Sep3asmParseContext pcx) throws FatalErrorException {
+		public void pass1(Sep3asmParseContext pctx) throws FatalErrorException {
 		}
-		public void pass2(Sep3asmParseContext pcx) throws FatalErrorException {
+		public void pass2(Sep3asmParseContext pctx) throws FatalErrorException {
 		}
 	}
 
