@@ -14,6 +14,7 @@ public class Sep3asmTokenizer extends SimpleTokenizer {
 		setCommentChar(';');
 		useHexNumber(true);	// 16進数（0xNNNN）を有効にする
 		useOctalNumber(false);	//  8進数（0NNNN） を無効にする
+		caseSensitive(true); // コンパイラの識別子はcase-sensitive
 		currentToken = null;
 	}
 

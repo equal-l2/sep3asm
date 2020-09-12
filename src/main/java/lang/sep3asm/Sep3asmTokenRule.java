@@ -86,4 +86,12 @@ public class Sep3asmTokenRule extends HashMap<String, Object> {
 		put("rlc",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x2800, 0, to_ops)));
 		put("rrc",   new TokenAssoc(Sep3asmToken.TK_INST1, new OneOperandInstruction(0x2C00, 0, to_ops)));
 	}
+
+	@Override
+	public Object get(Object key) {
+		if (key instanceof String) {
+			key = ((String)key).toLowerCase();
+		}
+		return super.get(key);
+	}
 }
