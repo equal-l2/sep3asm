@@ -6,11 +6,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class Program extends Sep3asmParseRule {
-	// program ::= { line }  EOF
-	private ArrayList<Sep3asmParseRule> list;
-	public Program(Sep3asmParseContext ctx) {
-		list = new ArrayList<Sep3asmParseRule>();
-	}
+	// program ::= { line } EOF
+
+	private ArrayList<Sep3asmParseRule> list = new ArrayList<>();
 	public static boolean isFirst(Sep3asmToken tk) {
 		return Line.isFirst(tk) || tk.getType() == Sep3asmToken.TK_EOF;
 	}
@@ -19,7 +17,7 @@ public class Program extends Sep3asmParseRule {
 		Sep3asmTokenizer ct = ctx.getTokenizer();
 		Sep3asmToken tk = ct.getCurrentToken(ctx);
 		while (Line.isFirst(tk)) {
-			Sep3asmParseRule line = new Line(ctx);
+			Sep3asmParseRule line = new Line();
 			line.parse(ctx);
 			list.add(line);
 			if (ctx.hasEnded) break;

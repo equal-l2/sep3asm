@@ -5,6 +5,7 @@ import lang.sep3asm.*;
 
 public class Operand extends Sep3asmParseRule {
 	// operand ::= REG | LPAR REG RPAR | LPAR REG RPAR [PLUS] | MINUS LPAR REG RPAR | SHARP numOrIdent | numOrIdent
+
 	public static final int REGISTER	= 001;
 	public static final int INDIRECT	= 002;
 	public static final int PREDEC		= 004;
@@ -15,9 +16,6 @@ public class Operand extends Sep3asmParseRule {
 	private int type;
 	private Sep3asmToken ref;
 
-	public Operand(Sep3asmParseContext ctx) {
-		regNum = -1;
-	}
 	public static boolean isFirst(Sep3asmToken tk) {
 		switch (tk.getType()) {
 			case Sep3asmToken.TK_NUM:
@@ -101,7 +99,7 @@ public class Operand extends Sep3asmParseRule {
 	private int fivebits;
 	private boolean needsExtraWord;
 	private int extraWord;
-	private int regNum;
+	private int regNum = -1;
 
 	public boolean needsExtraWord()	{ return needsExtraWord; }
 	public int to5bits()			{ return fivebits; }

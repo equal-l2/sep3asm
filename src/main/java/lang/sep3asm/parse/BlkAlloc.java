@@ -5,11 +5,9 @@ import lang.sep3asm.*;
 import java.util.ArrayList;
 
 public class BlkAlloc extends Sep3asmParseRule {
-	private ArrayList<Sep3asmToken> tks;
+	// blkAlloc ::= ".BLKW" numOrIdent { "," numOrIdent }
 
-	public BlkAlloc(Sep3asmParseContext ctx) {
-		tks = new ArrayList<>();
-	}
+	private ArrayList<Sep3asmToken> tks = new ArrayList<>();
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_DOTBL;

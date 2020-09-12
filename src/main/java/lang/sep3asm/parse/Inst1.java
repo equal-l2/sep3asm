@@ -10,9 +10,6 @@ public class Inst1 extends Sep3asmParseRule {
 	private Operand op2;
 	Sep3Instruction sep3inst;
 
-	public Inst1(Sep3asmParseContext ctx) {
-	}
-
 	static public boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_INST1;
 	}
@@ -22,7 +19,7 @@ public class Inst1 extends Sep3asmParseRule {
 		inst = ct.getCurrentToken(ctx);
 		Sep3asmToken tk = ct.getNextToken(ctx);
 		if (Operand.isFirst(tk)) {
-			op2 = new Operand(ctx);
+			op2 = new Operand();
 			op2.parse(ctx);
 			tk = ct.getCurrentToken(ctx);
 		} else {

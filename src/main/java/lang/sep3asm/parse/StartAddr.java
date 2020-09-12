@@ -4,11 +4,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class StartAddr extends Sep3asmParseRule {
-	private Sep3asmToken rhs;
+	// startAddr ::= "." "=" numOrIdent
 
-	public StartAddr(Sep3asmParseContext ctx) {
-		rhs = null;
-	}
+	private Sep3asmToken rhs;
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_DOT;

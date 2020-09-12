@@ -4,11 +4,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class Line extends Sep3asmParseRule {
-	private Sep3asmParseRule syn;
+	// line ::= (labelLine | instLine | pseudoInstLine | comment) NL
 
-	public Line(Sep3asmParseContext ctx) {
-		syn = null;
-	}
+	private Sep3asmParseRule syn;
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return LabelLine.isFirst(tk)
@@ -23,16 +21,17 @@ public class Line extends Sep3asmParseRule {
 		Sep3asmToken tk = tknz.getCurrentToken(ctx);
 		if (LabelLine.isFirst(tk)) {
 			//System.out.println("Label");
-			syn = new LabelLine(ctx);
+			syn = new LabelLine();
 		} else if (InstLine.isFirst(tk)) {
 			//System.out.println("Inst");
-			syn = new InstLine(ctx);
+			syn = new InstLine();
 		} else if (PseudoInstLine.isFirst(tk)) {
 			//System.out.println("P-Inst");
-			syn = new PseudoInstLine(ctx);
+			syn = new PseudoInstLine();
 		} else if (Comment.isFirst(tk)) {
+			// TODO: is this really required? (tokenizer remove comments)
 			//System.out.println("Comment");
-			syn = new Comment(ctx);
+			syn = new Comment();
 		}
 		if (syn != null) syn.parse(ctx);
 

@@ -6,12 +6,10 @@ import lang.sep3asm.instruction.Sep3Instruction;
 
 public class Inst2 extends Sep3asmParseRule {
 	// inst2 ::= INST2 operand COMMA operand
+
 	private Sep3asmToken inst;
 	private Operand op1, op2;
 	Sep3Instruction sep3inst;
-
-	public Inst2(Sep3asmParseContext ctx) {
-	}
 
 	static public boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_INST2;
@@ -22,7 +20,7 @@ public class Inst2 extends Sep3asmParseRule {
 		inst = ct.getCurrentToken(ctx);
 		Sep3asmToken tk = ct.getNextToken(ctx);
 		if (Operand.isFirst(tk)) {
-			op1 = new Operand(ctx);
+			op1 = new Operand();
 			op1.parse(ctx);
 			tk = ct.getCurrentToken(ctx);
 			if (tk.getType() == Sep3asmToken.TK_COMMA) {
@@ -31,7 +29,7 @@ public class Inst2 extends Sep3asmParseRule {
 				ctx.warning(tk.toExplainString() + ",が抜けていますので補いました");
 			}
 			if (Operand.isFirst(tk)) {
-				op2 = new Operand(ctx);
+				op2 = new Operand();
 				op2.parse(ctx);
 			} else {
 				ctx.warning(tk.toExplainString() + "オペランドが来ます");

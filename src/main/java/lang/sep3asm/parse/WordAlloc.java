@@ -5,10 +5,7 @@ import lang.sep3asm.*;
 import java.util.ArrayList;
 
 public class WordAlloc extends Sep3asmParseRule {
-	private java.util.ArrayList<Sep3asmToken> tks;
-	public WordAlloc(Sep3asmParseContext ctx) {
-		tks = new ArrayList<>();
-	}
+	private java.util.ArrayList<Sep3asmToken> tks = new ArrayList<>();
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_DOTWD;

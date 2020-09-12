@@ -5,12 +5,11 @@ import lang.sep3asm.*;
 import lang.sep3asm.instruction.Sep3Instruction;
 
 public class InstJ extends Sep3asmParseRule {
+    // instJ ::= INSTJ operand
+
 	private Sep3asmToken inst;
 	private Operand op1;
 	Sep3Instruction sep3inst;
-
-	public InstJ(Sep3asmParseContext ctx) {
-	}
 
 	static public boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_INSTJ;
@@ -21,7 +20,7 @@ public class InstJ extends Sep3asmParseRule {
 		inst = ct.getCurrentToken(ctx);
 		Sep3asmToken tk = ct.getNextToken(ctx);
 		if (Operand.isFirst(tk)) {
-			op1 = new Operand(ctx);
+			op1 = new Operand();
 			op1.parse(ctx);
 			tk = ct.getCurrentToken(ctx);
 		} else {

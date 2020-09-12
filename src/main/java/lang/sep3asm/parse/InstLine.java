@@ -4,11 +4,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class InstLine extends Sep3asmParseRule {
-	private Sep3asmParseRule syn;
+    // instLine ::= inst0 | inst1 | inst2 | instJ
 
-	public InstLine(Sep3asmParseContext ctx) {
-		syn = null;
-	}
+	private Sep3asmParseRule syn;
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return Inst0.isFirst(tk)
@@ -21,13 +19,13 @@ public class InstLine extends Sep3asmParseRule {
 		Sep3asmTokenizer tknz = ctx.getTokenizer();
 		Sep3asmToken tk = tknz.getCurrentToken(ctx);
 		if (Inst0.isFirst(tk)) {
-			syn = new Inst0(ctx);
+			syn = new Inst0();
 		} else if (Inst1.isFirst(tk)) {
-			syn = new Inst1(ctx);
+			syn = new Inst1();
 		} else if (Inst2.isFirst(tk)) {
-			syn = new Inst2(ctx);
+			syn = new Inst2();
 		} else if (InstJ.isFirst(tk)) {
-			syn = new InstJ(ctx);
+			syn = new InstJ();
 		}
 		syn.parse(ctx);
 	}

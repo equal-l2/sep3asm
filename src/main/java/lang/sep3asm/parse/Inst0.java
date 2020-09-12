@@ -5,11 +5,10 @@ import lang.sep3asm.*;
 import lang.sep3asm.instruction.Sep3Instruction;
 
 public class Inst0 extends Sep3asmParseRule {
+	// inst0 ::= INST0
+
 	private Sep3asmToken inst;
 	Sep3Instruction sep3inst;
-
-	public Inst0(Sep3asmParseContext ctx) {
-	}
 
 	static public boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_INST0;

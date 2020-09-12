@@ -4,12 +4,10 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class LabelLine extends Sep3asmParseRule {
+	// labelLine ::= IDENT (COLON | EQUAL (NUM | TEXT))
+
 	private Sep3asmToken name;
 	private Sep3asmToken rhs;
-
-	public LabelLine(Sep3asmParseContext ctx) {
-		rhs = null;
-	}
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return tk.getType() == Sep3asmToken.TK_IDENT;

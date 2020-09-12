@@ -24,7 +24,7 @@ public class Sep3assembler {
 				Sep3asmTokenizer ct = pcx.getTokenizer();
 				Sep3asmToken tk = ct.getNextToken(pcx);
 				if (Program.isFirst(tk)) {
-					Sep3asmParseRule parseTree = new Program(pcx);
+					Sep3asmParseRule parseTree = new Program();
 
 					System.out.println("parse");
 					pcx.setLocationCounter(0);

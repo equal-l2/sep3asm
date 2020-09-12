@@ -4,11 +4,9 @@ import lang.*;
 import lang.sep3asm.*;
 
 public class PseudoInstLine extends Sep3asmParseRule {
-	private Sep3asmParseRule syn;
+	// pseudoInstLine ::= wordAlloc | blkAlloc | startAddr | ".END"
 
-	public PseudoInstLine(Sep3asmParseContext ctx) {
-		syn = null;
-	}
+	private Sep3asmParseRule syn;
 
 	public static boolean isFirst(Sep3asmToken tk) {
 		return WordAlloc.isFirst(tk)
@@ -22,13 +20,13 @@ public class PseudoInstLine extends Sep3asmParseRule {
 		Sep3asmToken tk = tknz.getCurrentToken(ctx);
 		if (WordAlloc.isFirst(tk)) {
 			//System.out.println("WordAlloc");
-			syn = new WordAlloc(ctx);
+			syn = new WordAlloc();
 		} else if (BlkAlloc.isFirst(tk)) {
 			//System.out.println("BlkAlloc");
-			syn = new BlkAlloc(ctx);
+			syn = new BlkAlloc();
 		} else if (StartAddr.isFirst(tk)) {
 			//System.out.println("StartAddr");
-			syn = new StartAddr(ctx);
+			syn = new StartAddr();
 		} else if (tk.getType() == Sep3asmToken.TK_DOTED) {
 			ctx.hasEnded = true;
 			tknz.getNextToken(ctx); // .endを捨てる
